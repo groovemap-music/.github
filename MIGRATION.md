@@ -5,7 +5,7 @@
 - Intended visibility: public only after a separate exposure review and approval
 - Source subtree: `migration/repositories/org-profile/`
 - Versioning: unversioned community/profile content
-- License: preserved source license pending a separate licensing decision
+- License: MIT
 
 This repository has no pre-existing product-code path to filter. Its useful history begins
 with the reviewed preparation commit in the preserved monorepo migration branch. The

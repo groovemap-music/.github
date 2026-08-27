@@ -162,8 +162,8 @@ function checkProfile(errors) {
 function checkLicense(errors) {
   const license = readFileSync(resolve(ROOT, "LICENSE"), "utf8");
   const notice = readFileSync(resolve(ROOT, "NOTICE.md"), "utf8");
-  if (!license.includes("PolyForm Noncommercial License 1.0.0")) errors.push("LICENSE: preserved source license is missing");
-  if (!license.includes("Required Notice: Copyright (c) 2023-2026 Robert Wlodarczyk")) errors.push("LICENSE: required notice is missing");
+  if (!license.startsWith("MIT License\n")) errors.push("LICENSE: MIT license heading is missing");
+  if (!license.includes("Permission is hereby granted, free of charge")) errors.push("LICENSE: MIT grant is missing");
   if (!notice.includes("Space Grotesk font binaries were not promoted")) errors.push("NOTICE.md: excluded-font notice is missing");
 }
 
