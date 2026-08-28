@@ -1,0 +1,13 @@
+{
+  "allowedExternalHosts": [
+    "github.com",
+    "groovemap.music"
+  ],
+  "canonicalWebsite": "https://groovemap.music",
+  "repository": {
+    "githubPagesEnabled": false,
+    "name": ".github",
+    "owner": "groovemap-music"
+  },
+  "schemaVersion": 1
+}

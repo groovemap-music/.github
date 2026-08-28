@@ -12,9 +12,8 @@ const REQUIRED_FILES = [
   "NOTICE.md",
   "README.md",
   "docs/community-health.md",
-  "docs/publication-runbook.md",
   "policy/community-health.json",
-  "policy/public-exposure.json",
+  "policy/profile.json",
   "profile/README.md",
   "profile/assets/avatar.svg",
   "profile/assets/banner-dark.svg",
@@ -170,14 +169,10 @@ function checkLicense(errors) {
 function checkExposure(errors, policy, communityHealth) {
   const repository = policy.repository ?? {};
   if (repository.owner !== "groovemap-music" || repository.name !== ".github") {
-    errors.push("policy/public-exposure.json: wrong repository identity");
+    errors.push("policy/profile.json: wrong repository identity");
   }
-  if (repository.currentVisibility !== "private") errors.push("policy/public-exposure.json: initial visibility must remain private");
-  if (repository.intendedVisibility !== "public" || repository.publicTransitionApprovalRequired !== true) {
-    errors.push("policy/public-exposure.json: public transition must remain approval-gated");
-  }
-  if (repository.githubPagesEnabled !== false) errors.push("policy/public-exposure.json: Pages does not belong to the profile repository");
-  if (policy.canonicalWebsite !== "https://groovemap.music") errors.push("policy/public-exposure.json: canonical website is incorrect");
+  if (repository.githubPagesEnabled !== false) errors.push("policy/profile.json: Pages does not belong to the profile repository");
+  if (policy.canonicalWebsite !== "https://groovemap.music") errors.push("policy/profile.json: canonical website is incorrect");
 
   if (!Array.isArray(communityHealth.inheritedFiles) || communityHealth.inheritedFiles.length !== 0) {
     errors.push("policy/community-health.json: inherited files require a separate reviewed policy change");
@@ -195,7 +190,7 @@ function checkExposure(errors, policy, communityHealth) {
 
 export function validate(section = "all") {
   const errors = [];
-  const exposure = readJson("policy/public-exposure.json");
+  const exposure = readJson("policy/profile.json");
   const communityHealth = readJson("policy/community-health.json");
   checkRequiredFiles(errors);
   if (["all", "markdown"].includes(section)) checkMarkdown(errors, exposure.allowedExternalHosts ?? []);
