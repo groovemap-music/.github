@@ -1,9 +1,11 @@
 # Promoted profile assets
 
+See the organization [documentation index](../../docs/README.md) for public profile
+ownership and conventions.
+
 These rendered files are promoted copies, not editable branding sources.
 
 - Canonical owner: `groovemap-music/infra`, `brand/`
-- Canonical source revision: `a3135e2908cc56644d31ba60068f9a81446ac8f8`
 - Promotion target: `groovemap-music/.github`, `profile/assets/`
 - Integrity record: [`checksums.sha256`](checksums.sha256)
 

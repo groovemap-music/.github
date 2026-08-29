@@ -1,0 +1,207 @@
+name: Reusable CI
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: GitHub-hosted runner label.
+        required: false
+        default: ubuntu-24.04
+        type: string
+      setup-command:
+        description: Locked dependency installation command.
+        required: false
+        default: just setup
+        type: string
+      check-command:
+        description: Authoritative repository validation command.
+        required: false
+        default: just check
+        type: string
+      fallback-command:
+        description: Credential-free gate used until private-library credentials exist.
+        required: false
+        default: just source-check
+        type: string
+      requires-private-library:
+        description: Whether setup needs read access to groovemap-music/python-libraries.
+        required: false
+        default: false
+        type: boolean
+      audit-command:
+        description: Optional network-backed dependency audit command.
+        required: false
+        default: ""
+        type: string
+      image-command:
+        description: Optional local container build and inspection command.
+        required: false
+        default: ""
+        type: string
+      coverage-command:
+        description: Optional command that generates an additional XML or LCOV report.
+        required: false
+        default: ""
+        type: string
+      e2e-setup-command:
+        description: Optional browser dependency setup command.
+        required: false
+        default: ""
+        type: string
+      e2e-instrument-command:
+        description: Optional browser JavaScript instrumentation command.
+        required: false
+        default: ""
+        type: string
+      e2e-command:
+        description: Optional end-to-end test command.
+        required: false
+        default: ""
+        type: string
+      e2e-post-command:
+        description: Optional coverage-report generation command run after E2E.
+        required: false
+        default: ""
+        type: string
+      coverage-flags:
+        description: Codecov flags for the caller repository.
+        required: false
+        default: unit
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up pinned repository tools
+        uses: groovemap-music/.github/.github/actions/setup-tools@main
+
+      - name: Validate shared Python policy
+        if: hashFiles('**/pyproject.toml') != ''
+        uses: groovemap-music/.github/.github/actions/validate-python-policy@main
+
+      - name: Verify Beadhive-compatible Just interface
+        shell: bash
+        run: |
+          just --list
+          just --dry-run check
+
+      - name: Determine validation capability
+        id: capability
+        shell: bash
+        env:
+          APP_ID: ${{ vars.GROOVEMAP_CI_APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.GROOVEMAP_CI_APP_PRIVATE_KEY }}
+          REQUIRES_PRIVATE_LIBRARY: ${{ inputs.requires-private-library }}
+        run: |
+          if [[ "${REQUIRES_PRIVATE_LIBRARY}" != "true" ]]; then
+            echo "full=true" >> "${GITHUB_OUTPUT}"
+          elif [[ -n "${APP_ID}" && -n "${APP_PRIVATE_KEY}" ]]; then
+            echo "full=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "::warning::Private-library App credentials are not configured; running the source-only gate."
+            echo "full=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Mint private-library token
+        id: app-token
+        if: inputs.requires-private-library && steps.capability.outputs.full == 'true'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.GROOVEMAP_CI_APP_ID }}
+          private-key: ${{ secrets.GROOVEMAP_CI_APP_PRIVATE_KEY }}
+          owner: groovemap-music
+          repositories: python-libraries
+
+      - name: Authorize private Git dependencies
+        if: inputs.requires-private-library && steps.capability.outputs.full == 'true'
+        shell: bash
+        env:
+          APP_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          git config --global url."https://x-access-token:${APP_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+      - name: Install locked dependencies
+        if: steps.capability.outputs.full == 'true'
+        shell: bash
+        run: ${{ inputs.setup-command }}
+
+      - name: Run authoritative gate
+        if: steps.capability.outputs.full == 'true'
+        shell: bash
+        run: ${{ inputs.check-command }}
+
+      - name: Run credential-free gate
+        if: steps.capability.outputs.full != 'true'
+        shell: bash
+        run: ${{ inputs.fallback-command }}
+
+      - name: Run dependency audit
+        if: steps.capability.outputs.full == 'true' && inputs.audit-command != ''
+        shell: bash
+        run: ${{ inputs.audit-command }}
+
+      - name: Build and inspect local container
+        if: steps.capability.outputs.full == 'true' && inputs.image-command != ''
+        shell: bash
+        run: ${{ inputs.image-command }}
+
+      - name: Generate additional coverage
+        if: steps.capability.outputs.full == 'true' && inputs.coverage-command != ''
+        shell: bash
+        run: ${{ inputs.coverage-command }}
+
+      - name: Install browser dependencies
+        if: steps.capability.outputs.full == 'true' && inputs.e2e-command != '' && inputs.e2e-setup-command != ''
+        shell: bash
+        run: ${{ inputs.e2e-setup-command }}
+
+      - name: Instrument browser JavaScript
+        if: steps.capability.outputs.full == 'true' && inputs.e2e-command != '' && inputs.e2e-instrument-command != ''
+        shell: bash
+        run: ${{ inputs.e2e-instrument-command }}
+
+      - name: Run end-to-end tests
+        if: steps.capability.outputs.full == 'true' && inputs.e2e-command != ''
+        shell: bash
+        run: ${{ inputs.e2e-command }}
+
+      - name: Generate end-to-end coverage
+        if: always() && steps.capability.outputs.full == 'true' && inputs.e2e-post-command != ''
+        shell: bash
+        run: ${{ inputs.e2e-post-command }}
+
+      - name: Detect Codecov configuration and reports
+        id: codecov
+        if: always() && steps.capability.outputs.full == 'true'
+        shell: bash
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: |
+          if [[ -n "${CODECOV_TOKEN}" ]] && find . -type f \( -name coverage.xml -o -name lcov.info \) -print -quit | grep -q .; then
+            echo "upload=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "upload=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Upload coverage to Codecov
+        if: always() && steps.codecov.outputs.upload == 'true'
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ inputs.coverage-flags }}
+          fail_ci_if_error: true
+
+      - name: Remove private Git credentials
+        if: always() && inputs.requires-private-library
+        shell: bash
+        run: git config --global --unset-all url.https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/.insteadOf || true

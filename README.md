@@ -1,8 +1,9 @@
 # GrooveMap organization profile
 
-This repository owns the public profile and shared community-health policy for the
-GrooveMap GitHub organization. GitHub renders [`profile/README.md`](profile/README.md)
-on the [organization profile](https://github.com/groovemap-music).
+This public repository owns the GrooveMap organization profile, shared community-health
+policy, reusable CI workflows, and reusable Actions. GitHub renders
+[`profile/README.md`](profile/README.md) on the
+[organization profile](https://github.com/groovemap-music).
 
 ## Develop and validate
 
@@ -26,6 +27,13 @@ material. It does not make network requests or change external state.
   owner-only settings; the `.github` repository does not apply it automatically.
 - No shared community-health files are enabled initially. See
   [`docs/community-health.md`](docs/community-health.md).
+- `.github/workflows/reusable-ci.yml` adapts the monolith's formatting, typing, test,
+  coverage, security, container, and E2E gates to each repository's `just` interface.
+- `.github/workflows/reusable-image-release.yml` publishes repository-named GHCR images
+  only from `v*` tags.
 
 This repository is unversioned because it publishes no independently versioned artifact.
 It intentionally has no Commitizen or release workflow.
+
+See the [documentation index](docs/README.md) for shared organization policy and
+conventions.

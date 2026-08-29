@@ -4,6 +4,9 @@
   <img alt="GrooveMap — explore the connections behind music" src="./assets/banner-light.svg">
 </picture>
 
+Organization conventions and shared workflow documentation are indexed in the
+[`.github` repository docs](../docs/README.md).
+
 # Explore the connections behind music
 
 [GrooveMap](https://groovemap.music) turns music-catalog data into a connected map of
