@@ -29,6 +29,8 @@ material. It does not make network requests or change external state.
   [`docs/community-health.md`](docs/community-health.md).
 - `.github/workflows/reusable-ci.yml` adapts the monolith's formatting, typing, test,
   coverage, security, container, and E2E gates to each repository's `just` interface.
+- `.github/actions/validate-python-policy` enforces the shared bounded Python 3.14
+  support contract. See [`docs/python-policy.md`](docs/python-policy.md).
 - `.github/workflows/reusable-image-release.yml` publishes repository-named GHCR images
   only from `v*` tags.
 
