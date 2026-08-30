@@ -17,6 +17,7 @@ typecheck:
 
 test:
     node --test scripts/validate.test.mjs
+    PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s .github/actions/validate-python-policy/tests -p 'test_*.py'
 
 build:
     node scripts/validate.mjs profile

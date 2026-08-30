@@ -1,5 +1,5 @@
 name: Validate shared Python policy
-description: Enforce GrooveMap's canonical pyproject toolchain, rules, and section ordering.
+description: Enforce GrooveMap's bounded Python 3.14 package, tool, and managed-runtime policy.
 
 runs:
   using: composite

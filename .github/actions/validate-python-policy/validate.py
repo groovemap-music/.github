@@ -42,7 +42,7 @@ RUFF_SELECT = ["ARG", "B", "C4", "E", "F", "I", "PLC", "PTH", "RUF", "S", "SIM",
 RUFF_IGNORE = ["B008", "C901", "E501", "S101"]
 
 MYPY_POLICY = {
-    "python_version": "3.13",
+    "python_version": "3.14",
     "warn_return_any": True,
     "warn_unused_configs": True,
     "disallow_untyped_defs": True,
@@ -91,6 +91,11 @@ COMMITIZEN_POLICY = {
 
 IGNORED_DIRECTORIES = {".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".venv", "node_modules", "target"}
 HEADER = re.compile(r"^\[([^[][^]]*)\]$")
+PYTHON_REQUIREMENT = ">=3.14,<3.15"
+RUFF_TARGET = "py314"
+PATCH_PINNED_PYTHON = "3.14.5"
+VERSION_CONSTRAINT = re.compile(r"^(>=|<)\s*(\d+(?:\.\d+)*)$")
+PATCH_VERSION = re.compile(r"^\d+\.\d+\.\d+$")
 
 
 def nested(document: dict[str, Any], *keys: str) -> Any:
@@ -126,8 +131,60 @@ def check_equal(errors: list[str], path: Path, label: str, actual: Any, expected
         errors.append(f"{path}: {label} must be {expected!r}; found {actual!r}")
 
 
-def validate_pyproject(path: Path) -> list[str]:
+def normalized_python_requirement(value: Any) -> tuple[tuple[str, tuple[int, ...]], ...] | None:
+    if not isinstance(value, str):
+        return None
+
+    constraints: list[tuple[str, tuple[int, ...]]] = []
+    for part in value.split(","):
+        match = VERSION_CONSTRAINT.fullmatch(part.strip())
+        if match is None:
+            return None
+        version = [int(component) for component in match.group(2).split(".")]
+        while len(version) > 2 and version[-1] == 0:
+            version.pop()
+        constraints.append((match.group(1), tuple(version)))
+    return tuple(sorted(constraints))
+
+
+def check_python_requirement(errors: list[str], path: Path, actual: Any) -> None:
+    expected = normalized_python_requirement(PYTHON_REQUIREMENT)
+    if normalized_python_requirement(actual) != expected:
+        errors.append(f"{path}: Python requirement must be semantically equivalent to {PYTHON_REQUIREMENT!r}; found {actual!r}")
+
+
+def nearest_mise_file(path: Path, root: Path) -> Path | None:
+    directory = path.parent
+    while directory == root or root in directory.parents:
+        candidate = directory / ".mise.toml"
+        if candidate.is_file():
+            return candidate
+        if directory == root:
+            return None
+        directory = directory.parent
+    return None
+
+
+def validate_runtime_pin(path: Path, root: Path) -> list[str]:
+    mise_path = nearest_mise_file(path, root)
+    if mise_path is None:
+        return []
+
+    try:
+        document = tomllib.loads(mise_path.read_text(encoding="utf-8"))
+    except tomllib.TOMLDecodeError as error:
+        return [f"{mise_path}: invalid TOML: {error}"]
+
+    python = document.get("tools", {}).get("python")
+    if isinstance(python, str) and PATCH_VERSION.fullmatch(python) and python != PATCH_PINNED_PYTHON:
+        return [f"{mise_path}: patch-pinned Python runtime must be {PATCH_PINNED_PYTHON!r}; found {python!r}"]
+    return []
+
+
+def validate_pyproject(path: Path, root: Path | None = None) -> list[str]:
     errors: list[str] = []
+    path = path.resolve()
+    root = (root or path.parent).resolve()
     text = path.read_text(encoding="utf-8")
     try:
         document = tomllib.loads(text)
@@ -142,7 +199,7 @@ def validate_pyproject(path: Path) -> list[str]:
         check_equal(errors, path, "build requirements", nested(document, "build-system", "requires"), ["hatchling>=1.27.0"])
 
         project = nested(document, "project")
-        check_equal(errors, path, "Python requirement", project.get("requires-python"), ">=3.13")
+        check_python_requirement(errors, path, project.get("requires-python"))
 
         development = set(nested(document, "dependency-groups", "dev"))
         missing_development = sorted(COMMON_DEV_DEPENDENCIES - development)
@@ -154,7 +211,7 @@ def validate_pyproject(path: Path) -> list[str]:
 
         ruff = nested(document, "tool", "ruff")
         check_equal(errors, path, "ruff.line-length", ruff.get("line-length"), 150)
-        check_equal(errors, path, "ruff.target-version", ruff.get("target-version"), "py313")
+        check_equal(errors, path, "ruff.target-version", ruff.get("target-version"), RUFF_TARGET)
         lint = nested(document, "tool", "ruff", "lint")
         check_equal(errors, path, "ruff select rules", lint.get("select"), RUFF_SELECT)
         check_equal(errors, path, "ruff ignored rules", lint.get("ignore"), RUFF_IGNORE)
@@ -198,6 +255,7 @@ def validate_pyproject(path: Path) -> list[str]:
     except KeyError as error:
         errors.append(f"{path}: required configuration table or key is missing: {error.args[0]}")
 
+    errors.extend(validate_runtime_pin(path, root))
     return errors
 
 
@@ -216,7 +274,7 @@ def main() -> int:
         print("No pyproject.toml files found; shared Python policy not applicable.")
         return 0
 
-    errors = [error for path in paths for error in validate_pyproject(path)]
+    errors = [error for path in paths for error in validate_pyproject(path, root)]
     if errors:
         for error in errors:
             print(f"ERROR {error}", file=sys.stderr)
