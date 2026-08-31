@@ -23,28 +23,34 @@ artists, labels, releases, credits, and the relationships between them.
 - [GrooveMap on the web](https://groovemap.music) is the canonical project website and
   documentation entry point.
 
-## Project repositories
+## Public project repositories
 
 Repositories begin private and become visible only when their access and licensing
-boundaries have been reviewed. A link may therefore be unavailable until its repository
-is ready for its intended audience.
+boundaries have been reviewed. The public repository map is sourced from the immutable
+[`design` catalog](https://github.com/groovemap-music/design/blob/59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d/catalog/repositories.json).
+A link may therefore be unavailable until its repository reaches the approved publication phase.
 
 | Repository | Purpose |
 | --- | --- |
-| [`catalog-api`](https://github.com/groovemap-music/catalog-api) | Authentication, Discogs OAuth and sync, catalog search, graph queries, recommendations, natural-language queries, internal analytics endpoints, and operator setup CLIs |
-| [`musicbrainz-graph-enricher`](https://github.com/groovemap-music/musicbrainz-graph-enricher) | Consume MusicBrainz events and enrich matched Neo4j entities |
-| [`musicbrainz-sql-loader`](https://github.com/groovemap-music/musicbrainz-sql-loader) | Consume MusicBrainz events and load the complete MusicBrainz dataset into PostgreSQL |
-| [`python-libraries`](https://github.com/groovemap-music/python-libraries) | Versioned Python runtime, resilience, and agent-tool libraries shared by services |
-| [`operations-console`](https://github.com/groovemap-music/operations-console) | Privileged administrative and monitoring web console |
-| [`discogs-graph-enricher`](https://github.com/groovemap-music/discogs-graph-enricher) | Consume Discogs events and construct the Neo4j knowledge graph |
-| [`analytics-engine`](https://github.com/groovemap-music/analytics-engine) | Scheduled and precomputed music analytics with PostgreSQL and Redis caching |
-| [`database-schema`](https://github.com/groovemap-music/database-schema) | Versioned Neo4j and PostgreSQL schema definitions and compatibility policy |
-| [`discogs-sql-loader`](https://github.com/groovemap-music/discogs-sql-loader) | Consume Discogs events and build PostgreSQL analytical tables |
-| [`operations-toolkit`](https://github.com/groovemap-music/operations-toolkit) | Queue, error, system, and deployment inspection CLI utilities |
-| [`catalog-ingestion`](https://github.com/groovemap-music/catalog-ingestion) | Download, parse, normalize, and publish Discogs and MusicBrainz datasets |
-| [`graph-explorer`](https://github.com/groovemap-music/graph-explorer) | Public-facing graph exploration web application and API proxy |
-| [`mcp-server`](https://github.com/groovemap-music/mcp-server) | MCP integration exposing GrooveMap through the catalog API |
+| [`.github`](https://github.com/groovemap-music/.github) | GrooveMap organization profile and shared community-health files. |
+| [`analytics-engine`](https://github.com/groovemap-music/analytics-engine) | Scheduled and precomputed music analytics with PostgreSQL and Redis caching. |
+| [`automation`](https://github.com/groovemap-music/automation) | Reusable GitHub Actions workflows and composite actions for GrooveMap repositories. |
+| [`catalog-api`](https://github.com/groovemap-music/catalog-api) | GrooveMap authentication, catalog search, graph query, recommendation, and analytics API. |
+| [`catalog-ingestion`](https://github.com/groovemap-music/catalog-ingestion) | Downloads, parses, normalizes, and publishes Discogs and MusicBrainz datasets. |
+| [`database-schema`](https://github.com/groovemap-music/database-schema) | Versioned Neo4j and PostgreSQL schemas, migrations, and compatibility policy. |
+| [`deployment`](https://github.com/groovemap-music/deployment) | GrooveMap deployment, environment, and whole-stack operations configuration. |
+| [`design`](https://github.com/groovemap-music/design) | GrooveMap brand sources, public architecture decisions, and repository catalog. |
+| [`discogs-graph-enricher`](https://github.com/groovemap-music/discogs-graph-enricher) | Consumes Discogs events and constructs the Neo4j music knowledge graph. |
+| [`discogs-sql-loader`](https://github.com/groovemap-music/discogs-sql-loader) | Consumes Discogs events and builds PostgreSQL analytical tables. |
+| [`graph-explorer`](https://github.com/groovemap-music/graph-explorer) | Public-facing GrooveMap graph-exploration web application and catalog API proxy. |
+| [`groovemap-music.github.io`](https://github.com/groovemap-music/groovemap-music.github.io) | Static Astro organization website for groovemap.music. |
+| [`mcp-server`](https://github.com/groovemap-music/mcp-server) | Model Context Protocol integration exposing GrooveMap through the catalog API. |
+| [`musicbrainz-graph-enricher`](https://github.com/groovemap-music/musicbrainz-graph-enricher) | Consumes MusicBrainz events and enriches matched Neo4j entities. |
+| [`musicbrainz-sql-loader`](https://github.com/groovemap-music/musicbrainz-sql-loader) | Consumes MusicBrainz events and loads the complete dataset into PostgreSQL. |
+| [`operations-console`](https://github.com/groovemap-music/operations-console) | Privileged GrooveMap administration and monitoring web console. |
+| [`operations-toolkit`](https://github.com/groovemap-music/operations-toolkit) | Queue, error, system, and deployment inspection command-line utilities. |
+| [`python-libraries`](https://github.com/groovemap-music/python-libraries) | Versioned Python runtime, resilience, and agent-tool libraries shared by GrooveMap services. |
 
-We build in the open only after the relevant security and licensing boundary is ready for
-public scrutiny. Private infrastructure, deployment configuration, and operator material
-remain private.
+We publish only after the relevant security, history, and licensing boundary is ready for public
+scrutiny. Only the organization-creation infrastructure and historical planning archive remain
+private; operational credentials and private recovery evidence stay outside the public catalog.

@@ -3,6 +3,8 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import { designRepository, designRevision, promotedAssets } from "./brand-contract.mjs";
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const REQUIRED_FILES = [
@@ -19,6 +21,7 @@ const REQUIRED_FILES = [
   "profile/assets/banner-dark.svg",
   "profile/assets/banner-light.svg",
   "profile/assets/checksums.sha256",
+  "profile/assets/provenance.json",
 ];
 
 const COMMUNITY_HEALTH_PATHS = [
@@ -119,7 +122,14 @@ function checkMarkdown(errors, allowedHosts) {
 
 function checkProfile(errors) {
   const checksumPath = resolve(ROOT, "profile/assets/checksums.sha256");
-  for (const line of readFileSync(checksumPath, "utf8").trim().split("\n")) {
+  const expectedChecksums = promotedAssets.map(
+    (asset) => `${asset.sha256}  ${asset.destination.split("/").at(-1)}`,
+  );
+  const checksumLines = readFileSync(checksumPath, "utf8").trim().split("\n");
+  if (JSON.stringify(checksumLines) !== JSON.stringify(expectedChecksums)) {
+    errors.push("profile/assets/checksums.sha256: asset set or ordering differs from the pinned design contract");
+  }
+  for (const line of checksumLines) {
     const match = line.match(/^([a-f0-9]{64})  ([A-Za-z0-9.-]+)$/);
     if (!match) {
       errors.push("profile/assets/checksums.sha256: malformed checksum line");
@@ -135,21 +145,38 @@ function checkProfile(errors) {
     if (actual !== expected) errors.push(`profile/assets/${filename}: checksum mismatch`);
   }
 
+  const provenance = readJson("profile/assets/provenance.json");
+  const expectedProvenance = {
+    assets: promotedAssets,
+    canonicalRepository: designRepository,
+    canonicalRevision: designRevision,
+    editableSources: ["brand/tokens.json", "brand/templates/"],
+    generatedBy: "brand/render.mjs",
+  };
+  if (JSON.stringify(provenance) !== JSON.stringify(expectedProvenance)) {
+    errors.push("profile/assets/provenance.json: provenance differs from the pinned design contract");
+  }
+
   const profile = readFileSync(resolve(ROOT, "profile/README.md"), "utf8");
   for (const repository of [
+    ".github",
+    "analytics-engine",
+    "automation",
     "catalog-api",
+    "catalog-ingestion",
+    "database-schema",
+    "deployment",
+    "design",
+    "discogs-graph-enricher",
+    "discogs-sql-loader",
+    "graph-explorer",
+    "groovemap-music.github.io",
+    "mcp-server",
     "musicbrainz-graph-enricher",
     "musicbrainz-sql-loader",
-    "python-libraries",
     "operations-console",
-    "discogs-graph-enricher",
-    "analytics-engine",
-    "database-schema",
-    "discogs-sql-loader",
     "operations-toolkit",
-    "catalog-ingestion",
-    "graph-explorer",
-    "mcp-server",
+    "python-libraries",
   ]) {
     if (!profile.includes(`https://github.com/groovemap-music/${repository}`)) {
       errors.push(`profile/README.md: approved repository is missing: ${repository}`);

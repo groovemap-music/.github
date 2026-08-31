@@ -1,0 +1,20 @@
+export const designRepository = "https://github.com/groovemap-music/design";
+export const designRevision = "59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d";
+
+export const promotedAssets = [
+  {
+    destination: "profile/assets/avatar.svg",
+    sha256: "ed50ef49b62cabc09dcc1083ff88c41ee23195bdfa8a12918e2ed29185a8676f",
+    source: "brand/assets/avatar.svg",
+  },
+  {
+    destination: "profile/assets/banner-dark.svg",
+    sha256: "9497ee007f8d34bc5c19e601bf655808b8f08bfbb134f6efbb0c0d03e8409349",
+    source: "brand/assets/banner-dark.svg",
+  },
+  {
+    destination: "profile/assets/banner-light.svg",
+    sha256: "59f99d99ef140649ae4ea2fc6358e122e5dcb08ff83c4b3134ab5c0ef14534ae",
+    source: "brand/assets/banner-light.svg",
+  },
+];
