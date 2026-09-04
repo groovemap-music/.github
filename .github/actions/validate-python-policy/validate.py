@@ -93,7 +93,7 @@ IGNORED_DIRECTORIES = {".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".
 HEADER = re.compile(r"^\[([^[][^]]*)\]$")
 PYTHON_REQUIREMENT = ">=3.14,<3.15"
 RUFF_TARGET = "py314"
-PATCH_PINNED_PYTHON = "3.14.5"
+PATCH_PINNED_PYTHON = "3.14.7"
 VERSION_CONSTRAINT = re.compile(r"^(>=|<)\s*(\d+(?:\.\d+)*)$")
 PATCH_VERSION = re.compile(r"^\d+\.\d+\.\d+$")
 
