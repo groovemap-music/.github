@@ -98,6 +98,28 @@ export function findWorkflowIssues(content, policy) {
   return issues;
 }
 
+export function findRepositoryInventoryIssues(profile, policy) {
+  const issues = [];
+  const repositories = policy.publicRepositories;
+  if (!Array.isArray(repositories) || repositories.length === 0) {
+    return ["policy/profile.json: publicRepositories must be a non-empty list"];
+  }
+  if (new Set(repositories).size !== repositories.length) {
+    issues.push("policy/profile.json: publicRepositories contains duplicates");
+  }
+  for (const repository of repositories) {
+    if (!profile.includes(`https://github.com/groovemap-music/${repository}`)) {
+      issues.push(`profile/README.md: approved repository is missing: ${repository}`);
+    }
+  }
+  for (const repository of policy.retiredRepositories ?? []) {
+    if (profile.includes(`https://github.com/groovemap-music/${repository}`)) {
+      issues.push(`profile/README.md: retired repository is still active: ${repository}`);
+    }
+  }
+  return issues;
+}
+
 function readJson(path) {
   return JSON.parse(readFileSync(resolve(ROOT, path), "utf8"));
 }
@@ -175,19 +197,7 @@ function checkProfile(errors, policy) {
   }
 
   const profile = readFileSync(resolve(ROOT, "profile/README.md"), "utf8");
-  const repositories = policy.publicRepositories;
-  if (!Array.isArray(repositories) || repositories.length === 0) {
-    errors.push("policy/profile.json: publicRepositories must be a non-empty list");
-  } else {
-    if (new Set(repositories).size !== repositories.length) {
-      errors.push("policy/profile.json: publicRepositories contains duplicates");
-    }
-    for (const repository of repositories) {
-      if (!profile.includes(`https://github.com/groovemap-music/${repository}`)) {
-        errors.push(`profile/README.md: approved repository is missing: ${repository}`);
-      }
-    }
-  }
+  errors.push(...findRepositoryInventoryIssues(profile, policy));
   if (!profile.includes("https://groovemap.music")) errors.push("profile/README.md: canonical website is missing");
 }
 

@@ -36,16 +36,17 @@ A link may therefore be unavailable until its repository reaches the approved pu
 | [`analytics-engine`](https://github.com/groovemap-music/analytics-engine) | Scheduled and precomputed music analytics with PostgreSQL and Redis caching. |
 | [`automation`](https://github.com/groovemap-music/automation) | Reusable GitHub Actions workflows and composite actions for GrooveMap repositories. |
 | [`catalog-api`](https://github.com/groovemap-music/catalog-api) | GrooveMap authentication, catalog search, graph query, recommendation, and analytics API. |
-| [`catalog-ingestion`](https://github.com/groovemap-music/catalog-ingestion) | Downloads, parses, normalizes, and publishes Discogs and MusicBrainz datasets. |
 | [`database-schema`](https://github.com/groovemap-music/database-schema) | Versioned Neo4j and PostgreSQL schemas, migrations, and compatibility policy. |
 | [`deployment`](https://github.com/groovemap-music/deployment) | GrooveMap deployment, environment, and whole-stack operations configuration. |
 | [`design`](https://github.com/groovemap-music/design) | GrooveMap brand sources, public architecture decisions, and repository catalog. |
 | [`discogs-graph-enricher`](https://github.com/groovemap-music/discogs-graph-enricher) | Consumes Discogs events and constructs the Neo4j music knowledge graph. |
+| [`discogs-ingestion`](https://github.com/groovemap-music/discogs-ingestion) | Downloads, verifies, parses, and normalizes Discogs XML dumps, then publishes versioned catalog events. |
 | [`discogs-sql-loader`](https://github.com/groovemap-music/discogs-sql-loader) | Consumes Discogs events and builds PostgreSQL analytical tables. |
 | [`graph-explorer`](https://github.com/groovemap-music/graph-explorer) | Public-facing GrooveMap graph-exploration web application and catalog API proxy. |
 | [`groovemap-music.github.io`](https://github.com/groovemap-music/groovemap-music.github.io) | Static Astro organization website for groovemap.music. |
 | [`mcp-server`](https://github.com/groovemap-music/mcp-server) | Model Context Protocol integration exposing GrooveMap through the catalog API. |
 | [`musicbrainz-graph-enricher`](https://github.com/groovemap-music/musicbrainz-graph-enricher) | Consumes MusicBrainz events and enriches matched Neo4j entities. |
+| [`musicbrainz-ingestion`](https://github.com/groovemap-music/musicbrainz-ingestion) | Downloads, verifies, and extracts MusicBrainz JSON dumps, enriches JSONL records, then publishes versioned catalog events. |
 | [`musicbrainz-sql-loader`](https://github.com/groovemap-music/musicbrainz-sql-loader) | Consumes MusicBrainz events and loads the complete dataset into PostgreSQL. |
 | [`operations-console`](https://github.com/groovemap-music/operations-console) | Privileged GrooveMap administration and monitoring web console. |
 | [`operations-toolkit`](https://github.com/groovemap-music/operations-toolkit) | Queue, error, system, and deployment inspection command-line utilities. |

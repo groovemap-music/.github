@@ -5,15 +5,21 @@
   ],
   "canonicalWebsite": "https://groovemap.music",
   "publicRepositories": [
+    ".github",
     "analytics-engine",
+    "automation",
     "catalog-api",
-    "catalog-ingestion",
     "database-schema",
+    "deployment",
+    "design",
     "discogs-graph-enricher",
+    "discogs-ingestion",
     "discogs-sql-loader",
     "graph-explorer",
+    "groovemap-music.github.io",
     "mcp-server",
     "musicbrainz-graph-enricher",
+    "musicbrainz-ingestion",
     "musicbrainz-sql-loader",
     "operations-console",
     "operations-toolkit",
@@ -24,5 +30,8 @@
     "name": ".github",
     "owner": "groovemap-music"
   },
+  "retiredRepositories": [
+    "catalog-ingestion"
+  ],
   "schemaVersion": 1
 }

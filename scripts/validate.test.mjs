@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { extractLinks, findExposureIssues, findWorkflowIssues, validateExternalLink } from "./validate.mjs";
+import {
+  extractLinks,
+  findExposureIssues,
+  findRepositoryInventoryIssues,
+  findWorkflowIssues,
+  validateExternalLink,
+} from "./validate.mjs";
 import { designRepository, designRevision, promotedAssets } from "./brand-contract.mjs";
 
 test("extracts Markdown and HTML asset links", () => {
@@ -47,5 +53,20 @@ test("requires the structured workflow provider contract without inherited secre
   assert.deepEqual(findWorkflowIssues(valid.replace("a".repeat(40), "main") + "    secrets: inherit\n", policy), [
     `required job must use ${policy.provider}@${policy.revision}`,
     "broad secret inheritance is forbidden",
+  ]);
+});
+
+test("requires split ingestion repositories and rejects the retired combined entry", () => {
+  const policy = {
+    publicRepositories: ["discogs-ingestion", "musicbrainz-ingestion"],
+    retiredRepositories: ["catalog-ingestion"],
+  };
+  const splitProfile = [
+    "https://github.com/groovemap-music/discogs-ingestion",
+    "https://github.com/groovemap-music/musicbrainz-ingestion",
+  ].join("\n");
+  assert.deepEqual(findRepositoryInventoryIssues(splitProfile, policy), []);
+  assert.deepEqual(findRepositoryInventoryIssues(`${splitProfile}\nhttps://github.com/groovemap-music/catalog-ingestion`, policy), [
+    "profile/README.md: retired repository is still active: catalog-ingestion",
   ]);
 });
