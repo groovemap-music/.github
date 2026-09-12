@@ -4,6 +4,21 @@
     "groovemap.music"
   ],
   "canonicalWebsite": "https://groovemap.music",
+  "publicRepositories": [
+    "analytics-engine",
+    "catalog-api",
+    "catalog-ingestion",
+    "database-schema",
+    "discogs-graph-enricher",
+    "discogs-sql-loader",
+    "graph-explorer",
+    "mcp-server",
+    "musicbrainz-graph-enricher",
+    "musicbrainz-sql-loader",
+    "operations-console",
+    "operations-toolkit",
+    "python-libraries"
+  ],
   "repository": {
     "githubPagesEnabled": false,
     "name": ".github",

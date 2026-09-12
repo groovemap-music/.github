@@ -6,9 +6,14 @@ default:
 setup:
     mise install
 
-check: lint typecheck test build license-check exposure-check
+check: typecheck test policy-check
 
-lint:
+policy-check:
+    node scripts/validate.mjs
+
+lint: markdown-check
+
+markdown-check:
     node scripts/validate.mjs markdown
 
 typecheck:
@@ -18,7 +23,13 @@ typecheck:
 test:
     node --test scripts/validate.test.mjs
 
-build:
+coverage:
+    mkdir -p coverage
+    node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=coverage/lcov.info scripts/validate.test.mjs
+
+build: profile-check
+
+profile-check:
     node scripts/validate.mjs profile
 
 license-check:
@@ -29,3 +40,8 @@ exposure-check:
 
 promote-brand:
     node scripts/promote-brand.mjs
+
+secret-scan: exposure-check
+
+workflow-check:
+    node scripts/validate.mjs workflow

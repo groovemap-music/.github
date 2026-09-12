@@ -16,15 +16,10 @@ jobs:
       language: mixed
       setup-command: just setup
       check-command: just check
-      coverage-command: >-
-        mkdir -p coverage &&
-        node --test --experimental-test-coverage
-        --test-reporter=lcov
-        --test-reporter-destination=coverage/lcov.info
-        scripts/validate.test.mjs
+      coverage-command: just coverage
       audit-command: "true"
       license-command: just license-check
-      secret-scan-command: just exposure-check
+      secret-scan-command: just secret-scan
       package-command: "true"
       install-command: "true"
       coverage-files: coverage/lcov.info
