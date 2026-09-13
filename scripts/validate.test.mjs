@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
   extractLinks,
+  findEmojiGuideIssues,
   findExposureIssues,
   findRepositoryInventoryIssues,
   findWorkflowIssues,
@@ -57,16 +59,63 @@ test("requires the structured workflow provider contract without inherited secre
 });
 
 test("requires split ingestion repositories and rejects the retired combined entry", () => {
+  const revision = "a".repeat(40);
   const policy = {
+    catalogProvenance: {
+      path: "catalog/repositories.json",
+      privateRepositoryCount: 0,
+      publicRepositoryCount: 2,
+      repository: "https://github.com/groovemap-music/design",
+      revision,
+    },
     publicRepositories: ["discogs-ingestion", "musicbrainz-ingestion"],
+    publicRepositoryDescriptions: {
+      "discogs-ingestion": "Discogs producer.",
+      "musicbrainz-ingestion": "MusicBrainz producer.",
+    },
     retiredRepositories: ["catalog-ingestion"],
   };
   const splitProfile = [
-    "https://github.com/groovemap-music/discogs-ingestion",
-    "https://github.com/groovemap-music/musicbrainz-ingestion",
+    "2 public repositories and 0 private repositories.",
+    `https://github.com/groovemap-music/design/blob/${revision}/catalog/repositories.json`,
+    "| [`discogs-ingestion`](https://github.com/groovemap-music/discogs-ingestion) | Discogs producer. |",
+    "| [`musicbrainz-ingestion`](https://github.com/groovemap-music/musicbrainz-ingestion) | MusicBrainz producer. |",
   ].join("\n");
   assert.deepEqual(findRepositoryInventoryIssues(splitProfile, policy), []);
   assert.deepEqual(findRepositoryInventoryIssues(`${splitProfile}\nhttps://github.com/groovemap-music/catalog-ingestion`, policy), [
     "profile/README.md: retired repository is still active: catalog-ingestion",
   ]);
+  assert.deepEqual(findEmojiGuideIssues("| ⚡ | catalog-ingestion | Combined ingestion |", policy), [
+    "docs/emoji-guide.md: retired repository is still active: catalog-ingestion",
+  ]);
+  assert.deepEqual(findEmojiGuideIssues("| ⬇️ | discogs-ingestion | Discogs producer |", policy), []);
+});
+
+test("rejects catalog description, provenance, count, and publication-caveat drift", () => {
+  const profile = readFileSync(new URL("../profile/README.md", import.meta.url), "utf8");
+  const policy = JSON.parse(readFileSync(new URL("../policy/profile.json", import.meta.url), "utf8"));
+  assert.deepEqual(findRepositoryInventoryIssues(profile, policy), []);
+
+  const staleDescription = profile.replace(
+    policy.publicRepositoryDescriptions["catalog-api"],
+    "Stale catalog API description.",
+  );
+  assert.ok(findRepositoryInventoryIssues(staleDescription, policy).includes(
+    "profile/README.md: catalog description differs: catalog-api",
+  ));
+
+  const mutableCatalog = profile.replace(policy.catalogProvenance.revision, "main");
+  assert.ok(findRepositoryInventoryIssues(mutableCatalog, policy).includes(
+    "profile/README.md: immutable Design catalog provenance is missing",
+  ));
+
+  const staleCount = profile.replace("19 public", "18 public");
+  assert.ok(findRepositoryInventoryIssues(staleCount, policy).includes(
+    "profile/README.md: public/private repository counts are missing",
+  ));
+
+  const caveated = `${profile}\nA link may still be unavailable.\n`;
+  assert.ok(findRepositoryInventoryIssues(caveated, policy).includes(
+    "profile/README.md: current public links must not carry a pre-publication caveat",
+  ));
 });

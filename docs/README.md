@@ -9,5 +9,7 @@ Reusable GitHub Actions and workflows are owned by the public
 Callers pin a reviewed full commit rather than a branch or mutable tag. No reusable workflow or
 composite-action implementation remains in this organization-profile repository.
 
-Public brand guidance and the repository catalog are owned by the pinned
-[`design` revision](https://github.com/groovemap-music/design/tree/59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d).
+Current service names and repository descriptions follow the immutable
+[`design` catalog](https://github.com/groovemap-music/design/blob/e45661e17f68c241fe13b449f57545c42cfc4b21/catalog/repositories.json).
+Promoted profile assets retain their own immutable Design source revision and hashes in
+[`profile/assets/provenance.json`](../profile/assets/provenance.json).

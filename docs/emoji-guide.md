@@ -3,7 +3,7 @@
 This guide documents all emojis used throughout the GrooveMap project for consistency and clarity.
 
 Service names follow the canonical public
-[`design` repository catalog](https://github.com/groovemap-music/design/blob/59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d/catalog/repositories.json).
+[`design` repository catalog](https://github.com/groovemap-music/design/blob/e45661e17f68c241fe13b449f57545c42cfc4b21/catalog/repositories.json).
 
 ## 🎯 Purpose
 
@@ -22,7 +22,8 @@ Emojis in GrooveMap serve to:
 | Emoji | Service           | Usage                                          |
 | ----- | ----------------- | ---------------------------------------------- |
 | 🔐    | catalog-api                    | Authentication, catalog, graph, and recommendation API |
-| ⚡    | catalog-ingestion              | Dataset acquisition and normalized event publication   |
+| ⬇️    | discogs-ingestion              | Discogs dump acquisition and source-owned event publication |
+| ⬇️    | musicbrainz-ingestion          | MusicBrainz dump acquisition and source-owned event publication |
 | 🔗    | discogs-graph-enricher         | Discogs-backed Neo4j graph enrichment                  |
 | 🐘    | discogs-sql-loader             | Discogs-backed PostgreSQL loading                       |
 | 🧠    | musicbrainz-graph-enricher     | MusicBrainz-backed Neo4j enrichment                     |
