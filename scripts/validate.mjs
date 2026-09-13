@@ -14,6 +14,7 @@ const REQUIRED_FILES = [
   "NOTICE.md",
   "README.md",
   "docs/community-health.md",
+  "policy/automation.json",
   "policy/community-health.json",
   "policy/profile.json",
   "profile/README.md",
@@ -51,7 +52,7 @@ const EXPOSURE_PATTERNS = [
 function walk(directory) {
   const files = [];
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    if ([".git", ".build", "node_modules"].includes(entry.name)) continue;
+    if ([".git", ".build", "coverage", "node_modules"].includes(entry.name)) continue;
     const path = resolve(directory, entry.name);
     if (entry.isDirectory()) files.push(...walk(path));
     else if (entry.isFile()) files.push(path);
@@ -79,6 +80,44 @@ export function validateExternalLink(link, allowedHosts) {
   if (url.protocol !== "https:") return `external link must use https: ${url.protocol}`;
   if (!allowedHosts.includes(url.hostname)) return `external host is not allowlisted: ${url.hostname}`;
   return null;
+}
+
+export function findWorkflowIssues(content, policy) {
+  const issues = [];
+  const expectedProvider = `${policy.provider}@${policy.revision}`;
+  if (!content.includes(`uses: ${expectedProvider}`)) {
+    issues.push(`required job must use ${expectedProvider}`);
+  }
+  if (!/^[0-9a-f]{40}$/.test(policy.revision ?? "")) {
+    issues.push("policy revision must be a full commit SHA");
+  }
+  for (const input of policy.requiredInputs ?? []) {
+    if (!new RegExp(`^\\s+${input}:`, "m").test(content)) issues.push(`required input is missing: ${input}`);
+  }
+  if (/^\s*secrets:\s*inherit\s*$/m.test(content)) issues.push("broad secret inheritance is forbidden");
+  return issues;
+}
+
+export function findRepositoryInventoryIssues(profile, policy) {
+  const issues = [];
+  const repositories = policy.publicRepositories;
+  if (!Array.isArray(repositories) || repositories.length === 0) {
+    return ["policy/profile.json: publicRepositories must be a non-empty list"];
+  }
+  if (new Set(repositories).size !== repositories.length) {
+    issues.push("policy/profile.json: publicRepositories contains duplicates");
+  }
+  for (const repository of repositories) {
+    if (!profile.includes(`https://github.com/groovemap-music/${repository}`)) {
+      issues.push(`profile/README.md: approved repository is missing: ${repository}`);
+    }
+  }
+  for (const repository of policy.retiredRepositories ?? []) {
+    if (profile.includes(`https://github.com/groovemap-music/${repository}`)) {
+      issues.push(`profile/README.md: retired repository is still active: ${repository}`);
+    }
+  }
+  return issues;
 }
 
 function readJson(path) {
@@ -120,7 +159,7 @@ function checkMarkdown(errors, allowedHosts) {
   }
 }
 
-function checkProfile(errors) {
+function checkProfile(errors, policy) {
   const checksumPath = resolve(ROOT, "profile/assets/checksums.sha256");
   const expectedChecksums = promotedAssets.map(
     (asset) => `${asset.sha256}  ${asset.destination.split("/").at(-1)}`,
@@ -158,31 +197,14 @@ function checkProfile(errors) {
   }
 
   const profile = readFileSync(resolve(ROOT, "profile/README.md"), "utf8");
-  for (const repository of [
-    ".github",
-    "analytics-engine",
-    "automation",
-    "catalog-api",
-    "catalog-ingestion",
-    "database-schema",
-    "deployment",
-    "design",
-    "discogs-graph-enricher",
-    "discogs-sql-loader",
-    "graph-explorer",
-    "groovemap-music.github.io",
-    "mcp-server",
-    "musicbrainz-graph-enricher",
-    "musicbrainz-sql-loader",
-    "operations-console",
-    "operations-toolkit",
-    "python-libraries",
-  ]) {
-    if (!profile.includes(`https://github.com/groovemap-music/${repository}`)) {
-      errors.push(`profile/README.md: approved repository is missing: ${repository}`);
-    }
-  }
+  errors.push(...findRepositoryInventoryIssues(profile, policy));
   if (!profile.includes("https://groovemap.music")) errors.push("profile/README.md: canonical website is missing");
+}
+
+function checkWorkflow(errors, policy) {
+  const path = ".github/workflows/ci.yml";
+  const content = readFileSync(resolve(ROOT, path), "utf8");
+  for (const issue of findWorkflowIssues(content, policy)) errors.push(`${path}: ${issue}`);
 }
 
 function checkLicense(errors) {
@@ -218,18 +240,20 @@ function checkExposure(errors, policy, communityHealth) {
 export function validate(section = "all") {
   const errors = [];
   const exposure = readJson("policy/profile.json");
+  const automation = readJson("policy/automation.json");
   const communityHealth = readJson("policy/community-health.json");
   checkRequiredFiles(errors);
   if (["all", "markdown"].includes(section)) checkMarkdown(errors, exposure.allowedExternalHosts ?? []);
-  if (["all", "profile"].includes(section)) checkProfile(errors);
+  if (["all", "profile"].includes(section)) checkProfile(errors, exposure);
   if (["all", "license"].includes(section)) checkLicense(errors);
   if (["all", "exposure"].includes(section)) checkExposure(errors, exposure, communityHealth);
+  if (["all", "workflow"].includes(section)) checkWorkflow(errors, automation);
   return errors;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const section = process.argv[2] ?? "all";
-  const validSections = ["all", "markdown", "profile", "license", "exposure"];
+  const validSections = ["all", "markdown", "profile", "license", "exposure", "workflow"];
   if (!validSections.includes(section)) {
     console.error(`unknown validation section: ${section}`);
     process.exit(2);

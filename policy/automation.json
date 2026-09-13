@@ -1,0 +1,17 @@
+{
+  "provider": "groovemap-music/automation/.github/workflows/reusable-ci.yml",
+  "requiredInputs": [
+    "language",
+    "setup-command",
+    "check-command",
+    "coverage-command",
+    "audit-command",
+    "license-command",
+    "secret-scan-command",
+    "package-command",
+    "install-command",
+    "coverage-files"
+  ],
+  "revision": "833cb464507678c38ab78bd4718ce697399463e9",
+  "schemaVersion": 1
+}

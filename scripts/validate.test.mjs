@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { extractLinks, findExposureIssues, validateExternalLink } from "./validate.mjs";
+import {
+  extractLinks,
+  findExposureIssues,
+  findRepositoryInventoryIssues,
+  findWorkflowIssues,
+  validateExternalLink,
+} from "./validate.mjs";
 import { designRepository, designRevision, promotedAssets } from "./brand-contract.mjs";
 
 test("extracts Markdown and HTML asset links", () => {
@@ -34,4 +40,33 @@ test("pins profile assets to one immutable public design revision", () => {
     ],
   );
   assert.ok(promotedAssets.every(({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256)));
+});
+
+test("requires the structured workflow provider contract without inherited secrets", () => {
+  const policy = {
+    provider: "groovemap-music/automation/.github/workflows/reusable-ci.yml",
+    requiredInputs: ["language", "check-command"],
+    revision: "a".repeat(40),
+  };
+  const valid = `jobs:\n  required:\n    uses: ${policy.provider}@${policy.revision}\n    with:\n      language: mixed\n      check-command: just check\n`;
+  assert.deepEqual(findWorkflowIssues(valid, policy), []);
+  assert.deepEqual(findWorkflowIssues(valid.replace("a".repeat(40), "main") + "    secrets: inherit\n", policy), [
+    `required job must use ${policy.provider}@${policy.revision}`,
+    "broad secret inheritance is forbidden",
+  ]);
+});
+
+test("requires split ingestion repositories and rejects the retired combined entry", () => {
+  const policy = {
+    publicRepositories: ["discogs-ingestion", "musicbrainz-ingestion"],
+    retiredRepositories: ["catalog-ingestion"],
+  };
+  const splitProfile = [
+    "https://github.com/groovemap-music/discogs-ingestion",
+    "https://github.com/groovemap-music/musicbrainz-ingestion",
+  ].join("\n");
+  assert.deepEqual(findRepositoryInventoryIssues(splitProfile, policy), []);
+  assert.deepEqual(findRepositoryInventoryIssues(`${splitProfile}\nhttps://github.com/groovemap-music/catalog-ingestion`, policy), [
+    "profile/README.md: retired repository is still active: catalog-ingestion",
+  ]);
 });

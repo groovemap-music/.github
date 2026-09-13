@@ -1,5 +1,6 @@
 .mise.local.toml
 .build/
+coverage/
 node_modules/
 .DS_Store
 *.log
