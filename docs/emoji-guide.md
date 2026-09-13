@@ -2,6 +2,9 @@
 
 This guide documents all emojis used throughout the GrooveMap project for consistency and clarity.
 
+Service names follow the canonical public
+[`design` repository catalog](https://github.com/groovemap-music/design/blob/59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d/catalog/repositories.json).
+
 ## 🎯 Purpose
 
 Emojis in GrooveMap serve to:
@@ -18,17 +21,17 @@ Emojis in GrooveMap serve to:
 
 | Emoji | Service           | Usage                                          |
 | ----- | ----------------- | ---------------------------------------------- |
-| 🔐    | API               | User accounts, JWT auth, and collection sync   |
-| ⚡    | Extractor         | Rust-based high-performance extraction service |
-| 🔗    | Graphinator       | Neo4j graph service                            |
-| 🐘    | Tableinator       | PostgreSQL service                             |
-| 🧠    | Brainzgraphinator | MusicBrainz Neo4j enrichment service           |
-| 🧬    | Brainztableinator | MusicBrainz PostgreSQL service                 |
-| 🔍    | Explore           | Interactive graph exploration & trends         |
-| 📊    | Dashboard         | Analytics dashboard                            |
-| 📈    | Insights          | Precomputed analytics and music trends         |
-| 🤖    | MCP Server        | AI assistant integration via knowledge graph   |
-| 🐰    | RabbitMQ          | Message broker                                 |
+| 🔐    | catalog-api                    | Authentication, catalog, graph, and recommendation API |
+| ⚡    | catalog-ingestion              | Dataset acquisition and normalized event publication   |
+| 🔗    | discogs-graph-enricher         | Discogs-backed Neo4j graph enrichment                  |
+| 🐘    | discogs-sql-loader             | Discogs-backed PostgreSQL loading                       |
+| 🧠    | musicbrainz-graph-enricher     | MusicBrainz-backed Neo4j enrichment                     |
+| 🧬    | musicbrainz-sql-loader         | MusicBrainz-backed PostgreSQL loading                   |
+| 🔍    | graph-explorer                 | Interactive graph exploration and trends               |
+| 📊    | operations-console             | Administration and monitoring console                  |
+| 📈    | analytics-engine               | Precomputed analytics and music trends                  |
+| 🤖    | mcp-server                     | AI assistant integration through the catalog API       |
+| 🐰    | RabbitMQ                       | Message broker                                          |
 
 ### Status Indicators
 
