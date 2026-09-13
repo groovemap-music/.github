@@ -107,14 +107,61 @@ export function findRepositoryInventoryIssues(profile, policy) {
   if (new Set(repositories).size !== repositories.length) {
     issues.push("policy/profile.json: publicRepositories contains duplicates");
   }
+  const descriptions = policy.publicRepositoryDescriptions;
+  if (!descriptions || typeof descriptions !== "object" || Array.isArray(descriptions)) {
+    issues.push("policy/profile.json: publicRepositoryDescriptions must map every public repository");
+  } else {
+    const descriptionNames = Object.keys(descriptions).sort();
+    const repositoryNames = [...repositories].sort();
+    if (JSON.stringify(descriptionNames) !== JSON.stringify(repositoryNames)) {
+      issues.push("policy/profile.json: publicRepositoryDescriptions must match publicRepositories exactly");
+    }
+  }
   for (const repository of repositories) {
-    if (!profile.includes(`https://github.com/groovemap-music/${repository}`)) {
+    const url = `https://github.com/groovemap-music/${repository}`;
+    if (!profile.includes(url)) {
       issues.push(`profile/README.md: approved repository is missing: ${repository}`);
+    }
+    const description = descriptions?.[repository];
+    if (description && !profile.includes(`| [\`${repository}\`](${url}) | ${description} |`)) {
+      issues.push(`profile/README.md: catalog description differs: ${repository}`);
     }
   }
   for (const repository of policy.retiredRepositories ?? []) {
     if (profile.includes(`https://github.com/groovemap-music/${repository}`)) {
       issues.push(`profile/README.md: retired repository is still active: ${repository}`);
+    }
+  }
+
+  const catalog = policy.catalogProvenance;
+  if (!catalog || typeof catalog !== "object" || Array.isArray(catalog)) {
+    issues.push("policy/profile.json: catalogProvenance is required");
+  } else {
+    if (!/^[a-f0-9]{40}$/.test(catalog.revision ?? "")) {
+      issues.push("policy/profile.json: catalog revision must be a full commit SHA");
+    }
+    const catalogUrl = `${catalog.repository}/blob/${catalog.revision}/${catalog.path}`;
+    if (!profile.includes(catalogUrl)) {
+      issues.push("profile/README.md: immutable Design catalog provenance is missing");
+    }
+    if (repositories.length !== catalog.publicRepositoryCount) {
+      issues.push("policy/profile.json: public repository count differs from the inventory");
+    }
+    if (!profile.includes(`${catalog.publicRepositoryCount} public`) || !profile.includes(`${catalog.privateRepositoryCount} private`)) {
+      issues.push("profile/README.md: public/private repository counts are missing");
+    }
+  }
+  if (/\blink may\b[^.\n]*\bunavailable\b/i.test(profile)) {
+    issues.push("profile/README.md: current public links must not carry a pre-publication caveat");
+  }
+  return issues;
+}
+
+export function findEmojiGuideIssues(emojiGuide, policy) {
+  const issues = [];
+  for (const repository of policy.retiredRepositories ?? []) {
+    if (emojiGuide.includes(`| ${repository}`)) {
+      issues.push(`docs/emoji-guide.md: retired repository is still active: ${repository}`);
     }
   }
   return issues;
@@ -198,6 +245,8 @@ function checkProfile(errors, policy) {
 
   const profile = readFileSync(resolve(ROOT, "profile/README.md"), "utf8");
   errors.push(...findRepositoryInventoryIssues(profile, policy));
+  const emojiGuide = readFileSync(resolve(ROOT, "docs/emoji-guide.md"), "utf8");
+  errors.push(...findEmojiGuideIssues(emojiGuide, policy));
   if (!profile.includes("https://groovemap.music")) errors.push("profile/README.md: canonical website is missing");
 }
 

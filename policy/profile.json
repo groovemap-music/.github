@@ -4,6 +4,13 @@
     "groovemap.music"
   ],
   "canonicalWebsite": "https://groovemap.music",
+  "catalogProvenance": {
+    "path": "catalog/repositories.json",
+    "privateRepositoryCount": 2,
+    "publicRepositoryCount": 19,
+    "repository": "https://github.com/groovemap-music/design",
+    "revision": "e45661e17f68c241fe13b449f57545c42cfc4b21"
+  },
   "publicRepositories": [
     ".github",
     "analytics-engine",
@@ -25,6 +32,27 @@
     "operations-toolkit",
     "python-libraries"
   ],
+  "publicRepositoryDescriptions": {
+    ".github": "GrooveMap organization profile and shared community-health files.",
+    "analytics-engine": "Scheduled and precomputed music analytics with PostgreSQL and Redis caching.",
+    "automation": "Reusable GitHub Actions workflows and composite actions for GrooveMap repositories.",
+    "catalog-api": "GrooveMap authentication, catalog search, graph query, recommendation, analytics, and operator API.",
+    "database-schema": "Versioned Neo4j and PostgreSQL schemas, runnable initialization, and compatibility contracts.",
+    "deployment": "Whole-stack Compose topology, production hardening, runtime configuration promotion, and deployment validation.",
+    "design": "GrooveMap brand sources, public architecture decisions, repository catalog, and canonical media taxonomy.",
+    "discogs-graph-enricher": "Consumes Discogs events and constructs the Neo4j music knowledge graph.",
+    "discogs-ingestion": "Downloads, verifies, parses, and normalizes Discogs dumps, then publishes source-owned events.",
+    "discogs-sql-loader": "Consumes Discogs events and builds PostgreSQL analytical tables.",
+    "graph-explorer": "Public-facing GrooveMap graph-exploration web application and catalog API proxy.",
+    "groovemap-music.github.io": "Static Astro organization website for groovemap.music.",
+    "mcp-server": "Model Context Protocol integration exposing GrooveMap through the catalog API.",
+    "musicbrainz-graph-enricher": "Consumes MusicBrainz events and enriches matched Neo4j entities.",
+    "musicbrainz-ingestion": "Downloads and verifies MusicBrainz dumps, enriches normalized JSONL, and publishes source-owned events.",
+    "musicbrainz-sql-loader": "Consumes MusicBrainz events and loads the complete dataset into PostgreSQL.",
+    "operations-console": "Privileged GrooveMap administration and monitoring web console.",
+    "operations-toolkit": "Credential-conscious, primarily observational queue, error, system, and deployment command-line utilities.",
+    "python-libraries": "Versioned Python runtime, resilience, and agent-tool libraries shared by GrooveMap services."
+  },
   "repository": {
     "githubPagesEnabled": false,
     "name": ".github",
