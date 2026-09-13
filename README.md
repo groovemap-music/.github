@@ -1,7 +1,7 @@
 # GrooveMap organization profile
 
-This public repository owns the GrooveMap organization profile, shared community-health
-policy, reusable CI workflows, and reusable Actions. GitHub renders
+This public repository owns the GrooveMap organization profile and shared community-health
+policy. GitHub renders
 [`profile/README.md`](profile/README.md) on the
 [organization profile](https://github.com/groovemap-music).
 
@@ -21,21 +21,21 @@ material. It does not make network requests or change external state.
 
 ## Ownership boundaries
 
-- `groovemap-music/infra` owns editable brand tokens, templates, and rendering.
+- [`groovemap-music/design`](https://github.com/groovemap-music/design/tree/59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d/brand)
+  owns editable brand tokens, templates, and deterministic rendering.
 - This repository owns only promoted profile assets and community-health content.
+- [`groovemap-music/automation`](https://github.com/groovemap-music/automation/tree/7db8b4c535c79329e3821e32177932b4f9059253)
+  owns reusable CI, release workflows, and composite Actions.
 - The organization avatar is uploaded from `profile/assets/avatar.svg` through GitHub's
   owner-only settings; the `.github` repository does not apply it automatically.
 - No shared community-health files are enabled initially. See
   [`docs/community-health.md`](docs/community-health.md).
-- `.github/workflows/reusable-ci.yml` adapts the monolith's formatting, typing, test,
-  coverage, security, container, and E2E gates to each repository's `just` interface.
-- `.github/actions/validate-python-policy` enforces the shared bounded Python 3.14
-  support contract. See [`docs/python-policy.md`](docs/python-policy.md).
-- `.github/workflows/reusable-image-release.yml` publishes repository-named GHCR images
-  only from `v*` tags.
+- Reusable workflow and composite-action sources live only in `automation`; this repository no
+  longer carries compatibility copies.
+- The shared bounded Python 3.14 support contract remains documented in
+  [`docs/python-policy.md`](docs/python-policy.md).
 
 This repository is unversioned because it publishes no independently versioned artifact.
 It intentionally has no Commitizen or release workflow.
 
-See the [documentation index](docs/README.md) for shared organization policy and
-conventions.
+See the [documentation index](docs/README.md) for shared organization policy and conventions.
