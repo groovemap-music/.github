@@ -4,10 +4,34 @@
     "groovemap.music"
   ],
   "canonicalWebsite": "https://groovemap.music",
+  "publicRepositories": [
+    ".github",
+    "analytics-engine",
+    "automation",
+    "catalog-api",
+    "database-schema",
+    "deployment",
+    "design",
+    "discogs-graph-enricher",
+    "discogs-ingestion",
+    "discogs-sql-loader",
+    "graph-explorer",
+    "groovemap-music.github.io",
+    "mcp-server",
+    "musicbrainz-graph-enricher",
+    "musicbrainz-ingestion",
+    "musicbrainz-sql-loader",
+    "operations-console",
+    "operations-toolkit",
+    "python-libraries"
+  ],
   "repository": {
     "githubPagesEnabled": false,
     "name": ".github",
     "owner": "groovemap-music"
   },
+  "retiredRepositories": [
+    "catalog-ingestion"
+  ],
   "schemaVersion": 1
 }
