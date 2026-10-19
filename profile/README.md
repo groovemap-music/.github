@@ -33,7 +33,7 @@ descriptions are sourced from the immutable
 | Repository | Purpose |
 | --- | --- |
 | [`.github`](https://github.com/groovemap-music/.github) | GrooveMap organization profile and shared community-health files. |
-| [`analytics-engine`](https://github.com/groovemap-music/analytics-engine) | Scheduled and precomputed music analytics with PostgreSQL and Redis caching. |
+| [`analytics-engine`](https://github.com/groovemap-music/analytics-engine) | Scheduled and precomputed music analytics with PostgreSQL and Valkey caching. |
 | [`automation`](https://github.com/groovemap-music/automation) | Reusable GitHub Actions workflows and composite actions for GrooveMap repositories. |
 | [`catalog-api`](https://github.com/groovemap-music/catalog-api) | GrooveMap authentication, catalog search, graph query, recommendation, analytics, and operator API. |
 | [`database-schema`](https://github.com/groovemap-music/database-schema) | Versioned Neo4j and PostgreSQL schemas, runnable initialization, and compatibility contracts. |

@@ -34,7 +34,7 @@
   ],
   "publicRepositoryDescriptions": {
     ".github": "GrooveMap organization profile and shared community-health files.",
-    "analytics-engine": "Scheduled and precomputed music analytics with PostgreSQL and Redis caching.",
+    "analytics-engine": "Scheduled and precomputed music analytics with PostgreSQL and Valkey caching.",
     "automation": "Reusable GitHub Actions workflows and composite actions for GrooveMap repositories.",
     "catalog-api": "GrooveMap authentication, catalog search, graph query, recommendation, analytics, and operator API.",
     "database-schema": "Versioned Neo4j and PostgreSQL schemas, runnable initialization, and compatibility contracts.",
