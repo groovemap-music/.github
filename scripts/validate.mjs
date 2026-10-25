@@ -261,7 +261,8 @@ function checkLicense(errors) {
   const notice = readFileSync(resolve(ROOT, "NOTICE.md"), "utf8");
   if (!license.startsWith("MIT License\n")) errors.push("LICENSE: MIT license heading is missing");
   if (!license.includes("Permission is hereby granted, free of charge")) errors.push("LICENSE: MIT grant is missing");
-  if (!notice.includes("Space Grotesk font binaries were not promoted")) errors.push("NOTICE.md: excluded-font notice is missing");
+  if (!notice.includes("Jura") || !notice.includes("SIL Open Font License 1.1")) errors.push("NOTICE.md: Jura OFL attribution is missing");
+  if (!notice.includes("Jura font binary is not promoted")) errors.push("NOTICE.md: excluded-font notice is missing");
 }
 
 function checkExposure(errors, policy, communityHealth) {

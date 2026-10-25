@@ -5,6 +5,7 @@ Required Notice: Copyright (c) 2023-2026 Robert Wlodarczyk
 
 The GrooveMap SVGs in `profile/assets/` are deterministic rendered outputs promoted from
 the public `groovemap-music/design` source at commit
-`59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d`. They contain no embedded font software. The
-source monorepo's Space Grotesk font binaries were not promoted because an adjacent font
-license and provenance record were not available during preparation.
+`7abe13ad3e22e81b5437eb92acb8db998730e11a`. The lowercase `groovemap` wordmark is set in
+Jura (Copyright 2019 The Jura Project Authors, https://github.com/ossobuffo/jura), licensed
+under the SIL Open Font License 1.1. The SVGs contain glyph outlines only, with no embedded
+font software, and the Jura font binary is not promoted to this repository.
