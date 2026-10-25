@@ -2,22 +2,22 @@
   "assets": [
     {
       "destination": "profile/assets/avatar.svg",
-      "sha256": "ed50ef49b62cabc09dcc1083ff88c41ee23195bdfa8a12918e2ed29185a8676f",
+      "sha256": "c81fef638629fb797f1c4f0062a1eaaed67724ee40c22a918ef9eea0a74296ca",
       "source": "brand/assets/avatar.svg"
     },
     {
       "destination": "profile/assets/banner-dark.svg",
-      "sha256": "9497ee007f8d34bc5c19e601bf655808b8f08bfbb134f6efbb0c0d03e8409349",
+      "sha256": "427ff6042d9b16640b6a73f0950de995190393b996214bb6bbcc0daa81e6c4a4",
       "source": "brand/assets/banner-dark.svg"
     },
     {
       "destination": "profile/assets/banner-light.svg",
-      "sha256": "59f99d99ef140649ae4ea2fc6358e122e5dcb08ff83c4b3134ab5c0ef14534ae",
+      "sha256": "0f09674457b44d6bc4268f6bfc36ddcf9d85b5f343dd63d3b75ec8802620f80b",
       "source": "brand/assets/banner-light.svg"
     }
   ],
   "canonicalRepository": "https://github.com/groovemap-music/design",
-  "canonicalRevision": "59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d",
+  "canonicalRevision": "7abe13ad3e22e81b5437eb92acb8db998730e11a",
   "editableSources": [
     "brand/tokens.json",
     "brand/templates/"

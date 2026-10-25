@@ -21,7 +21,7 @@ material. It does not make network requests or change external state.
 
 ## Ownership boundaries
 
-- [`groovemap-music/design`](https://github.com/groovemap-music/design/tree/59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d/brand)
+- [`groovemap-music/design`](https://github.com/groovemap-music/design/tree/7abe13ad3e22e81b5437eb92acb8db998730e11a/brand)
   owns editable brand tokens, templates, and deterministic rendering.
 - This repository owns only promoted profile assets and community-health content.
 - [`groovemap-music/automation`](https://github.com/groovemap-music/automation/tree/7db8b4c535c79329e3821e32177932b4f9059253)
