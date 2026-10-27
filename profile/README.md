@@ -28,7 +28,7 @@ artists, labels, releases, credits, and the relationships between them.
 GrooveMap maintains 21 repositories: the 19 public implementation and documentation repositories
 below, plus 2 private boundaries, `infra` and `planning-archive`. This inventory and its
 descriptions are sourced from the immutable
-[`design` catalog](https://github.com/groovemap-music/design/blob/e45661e17f68c241fe13b449f57545c42cfc4b21/catalog/repositories.json).
+[`design` catalog](https://github.com/groovemap-music/design/blob/41be7cbe738f40df0c75ad7065475e91d6cc2aa4/catalog/repositories.json).
 
 | Repository | Purpose |
 | --- | --- |
@@ -44,7 +44,7 @@ descriptions are sourced from the immutable
 | [`discogs-sql-loader`](https://github.com/groovemap-music/discogs-sql-loader) | Consumes Discogs events and builds PostgreSQL analytical tables. |
 | [`graph-explorer`](https://github.com/groovemap-music/graph-explorer) | Public-facing GrooveMap graph-exploration web application and catalog API proxy. |
 | [`groovemap-music.github.io`](https://github.com/groovemap-music/groovemap-music.github.io) | Static Astro organization website for groovemap.music. |
-| [`mcp-server`](https://github.com/groovemap-music/mcp-server) | Model Context Protocol integration exposing GrooveMap through the catalog API. |
+| [`mcp-server`](https://github.com/groovemap-music/mcp-server) | Client-run Model Context Protocol integration exposing GrooveMap through the catalog API. |
 | [`musicbrainz-graph-enricher`](https://github.com/groovemap-music/musicbrainz-graph-enricher) | Consumes MusicBrainz events and enriches matched Neo4j entities. |
 | [`musicbrainz-ingestion`](https://github.com/groovemap-music/musicbrainz-ingestion) | Downloads and verifies MusicBrainz dumps, enriches normalized JSONL, and publishes source-owned events. |
 | [`musicbrainz-sql-loader`](https://github.com/groovemap-music/musicbrainz-sql-loader) | Consumes MusicBrainz events and loads the complete dataset into PostgreSQL. |
