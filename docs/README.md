@@ -10,6 +10,6 @@ Callers pin a reviewed full commit rather than a branch or mutable tag. No reusa
 composite-action implementation remains in this organization-profile repository.
 
 Current service names and repository descriptions follow the immutable
-[`design` catalog](https://github.com/groovemap-music/design/blob/e45661e17f68c241fe13b449f57545c42cfc4b21/catalog/repositories.json).
+[`design` catalog](https://github.com/groovemap-music/design/blob/41be7cbe738f40df0c75ad7065475e91d6cc2aa4/catalog/repositories.json).
 Promoted profile assets retain their own immutable Design source revision and hashes in
 [`profile/assets/provenance.json`](../profile/assets/provenance.json).

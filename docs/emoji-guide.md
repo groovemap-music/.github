@@ -3,7 +3,7 @@
 This guide documents all emojis used throughout the GrooveMap project for consistency and clarity.
 
 Service names follow the canonical public
-[`design` repository catalog](https://github.com/groovemap-music/design/blob/e45661e17f68c241fe13b449f57545c42cfc4b21/catalog/repositories.json).
+[`design` repository catalog](https://github.com/groovemap-music/design/blob/41be7cbe738f40df0c75ad7065475e91d6cc2aa4/catalog/repositories.json).
 
 ## 🎯 Purpose
 
