@@ -1,5 +1,8 @@
 # Python support policy
 
+This page defines the Python version and dependency-cooldown rules for GrooveMap Python
+packages. It is for maintainers of those packages and for anyone approving a security exception.
+
 GrooveMap Python packages support the Python 3.14 minor release. Their active
 configuration uses the following contract:
 
@@ -9,7 +12,7 @@ configuration uses the following contract:
 - Repositories that patch-pin Python through `.mise.toml` use `3.14.7`.
 
 The reusable
-[`validate-python-policy` action](https://github.com/groovemap-music/automation/tree/bbe1ca1a546138eb9239bc18048d86e57206cd0e/.github/actions/validate-python-policy)
+[`validate-python-policy` action](https://github.com/groovemap-music/automation/tree/ff553b505e070c04fc4d6ab51047509723dcdca7/.github/actions/validate-python-policy)
 checks this contract before a caller installs dependencies or runs its own validation. An unpinned
 or minor-only managed-runtime declaration is unaffected; the exact `3.14.7` requirement applies
 when a repository chooses a three-component Python pin.
