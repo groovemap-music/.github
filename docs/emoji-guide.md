@@ -1,8 +1,8 @@
 # 📋 Emoji Usage Guide for GrooveMap
 
-This guide is the shared convention for emojis in GrooveMap logs, documentation, and CI output.
+This guide is the shared convention for emojis in GrooveMap logs and CI workflow step names.
 It is for contributors to any GrooveMap repository. The log-related tables (Infrastructure,
-Status Indicators, Operation Types, Music Domain) describe the emojis GrooveMap services actually
+Status Indicators, Operation Types, Music Domain, CI/CD) describe the emojis GrooveMap services actually
 emit today; use the same ones in new log lines.
 
 Service names follow the canonical public
@@ -12,11 +12,9 @@ Service names follow the canonical public
 
 Emojis in GrooveMap serve to:
 
-- Provide visual hierarchy and scanning in documentation
 - Enable quick status recognition in logs
-- Differentiate services at a glance
-- Add emotional context to operations
-- Improve overall readability
+- Show at a glance which infrastructure a log line concerns
+- Mark workflow step names in CI
 
 ## 📊 Emoji Categories
 
@@ -51,23 +49,6 @@ a line talks about.
 | 🔧    | Configuration   | Client or consumer setup and teardown                         |
 | 🎉    | Completed       | Files or batches fully processed                              |
 | 🏁    | Finished        | Extraction-complete message sent                              |
-
-### Documentation Sections
-
-| Emoji | Section       | Usage                  |
-| ----- | ------------- | ---------------------- |
-| 🎯    | Overview      | Project goals, targets |
-| 🚀    | Quick Start   | Getting started guides |
-| 📖    | Documentation | Links to docs          |
-| 💬    | Community     | Support channels       |
-| 🌟    | Features      | Key capabilities       |
-| ⚙️    | Configuration | Settings, setup        |
-| 📐    | Architecture  | System design          |
-| 🛡️    | Security      | Security features      |
-| 📊    | Monitoring    | Observability          |
-| 🧪    | Testing       | Test coverage          |
-| ✅    | Prerequisites | Requirements           |
-| 💿    | Dataset       | Data information       |
 
 ### Operation Types
 
@@ -107,6 +88,10 @@ a line talks about.
 | 📈    | Telemetry on       | OpenTelemetry metrics exporting             |
 | 📉    | Telemetry off      | OpenTelemetry exporter disabled             |
 | 🧵    | Tracing            | OpenTelemetry traces exporting              |
+| 📄    | Full structure     | operations-toolkit CLI output: message dump |
+| 📌    | Optional fields    | operations-toolkit CLI output               |
+| 💡    | Tip                | operations-toolkit CLI hint                 |
+| 🔷    | Neo4j status       | operations-toolkit system monitor output    |
 | 🧭    | Tracing disabled   | Keeping the no-op tracer provider           |
 
 ### Music Domain
@@ -116,65 +101,11 @@ a line talks about.
 | 🎵    | Music    | General music reference (MusicBrainz)   |
 | 💿    | Media    | Release media edges written             |
 
-### Development
-
-| Emoji | Purpose     | Usage                 |
-| ----- | ----------- | --------------------- |
-| 💡    | Tips        | Pro tips, insights    |
-| 🤖    | AI/Claude   | AI assistance         |
-| 📚    | Reference   | Quick reference       |
-| 🛠️    | Development | Dev commands          |
-| 📋    | Guidelines  | Rules, checklists     |
-| 🏗️    | Building    | Architecture, Docker  |
-| 🔍    | Debugging   | Search, investigation |
-| 📦    | Container   | Docker status         |
-
 ### CI/CD & GitHub Actions
 
-| Emoji | Purpose         | Usage                 |
-| ----- | --------------- | --------------------- |
-| 🔀    | Checkout        | Repository checkout   |
-| 🐍    | Python          | Python setup          |
-| 📦    | Package Manager | UV/pip installation   |
-| 💾    | Cache           | Caching operations    |
-| 🧪    | Testing         | Test execution        |
-| 🔧    | Setup/Config    | Configuration steps   |
-| 📊    | Metrics         | Performance tracking  |
-| 🔒    | Security        | Login, permissions    |
-| 🔑    | Password Reset  | Password reset links  |
-| 🛡️    | Scanning        | Security scanning     |
-| 🚀    | Build/Deploy    | Build and deployment  |
-| 📢    | Notifications   | Alerts, announcements |
-| 🏷️    | Tagging         | Version tags, labels  |
-| ⏱️    | Timing          | Performance timing    |
-| 🎯    | Target          | Goals, objectives     |
-| ✅    | Success         | Successful completion |
-| ❌    | Failure         | Failed operations     |
-| ⏭️    | Skip            | Skipped steps         |
-| 🔄    | Retry           | Retry operations      |
-| 🧹    | Cleanup         | Cache/image cleanup   |
-| 📝    | Documentation   | PR creation           |
-| 🐳    | Docker          | Docker operations     |
-| 🎭    | Playwright      | E2E testing           |
-| 📤    | Upload          | Artifact upload       |
-| 🎥    | Recording       | Video capture         |
-| 🌐    | Browser         | Browser testing       |
-| 📱    | Mobile          | Mobile testing        |
-| 🐛    | Debug           | Debugging steps       |
-
-### Performance & Features
-
-| Emoji | Feature       | Usage               |
-| ----- | ------------- | ------------------- |
-| ⚡    | Speed         | High performance    |
-| 🔄    | Deduplication | Smart dedup         |
-| 📈    | Big Data      | Large scale         |
-| 🎯    | Concurrency   | Parallel processing |
-| 🔁    | Recovery      | Auto-recovery       |
-| 🏥    | Monitoring    | Health monitoring   |
-| 📝    | Type Safety   | Type checking       |
-| 🔍    | Search        | Search capabilities |
-| 🎨    | Visualization | UI/graphics         |
+| Emoji | Purpose  | Usage                                     |
+| ----- | -------- | ----------------------------------------- |
+| 🔎    | Checkout | Step name for checking out source (Pages) |
 
 ## Usage Guidelines
 
@@ -206,19 +137,6 @@ logger.info("🏥 Health server started on port 8000")
 logger.info("🛑 Received signal, initiating graceful shutdown...")
 ```
 
-### Documentation Headers
-
-```markdown
-## 🎯 Overview
-## 🚀 Quick Start
-## 🌟 Features
-## ⚙️ Configuration
-## 📐 Architecture
-## 🛡️ Security
-## 📊 Monitoring
-## 🧪 Testing
-```
-
 ### ASCII Art Integration
 
 Emojis are NOT used in ASCII art banners. Keep ASCII art pure text for compatibility.
@@ -229,7 +147,7 @@ Emojis are NOT used in ASCII art banners. Keep ASCII art pure text for compatibi
 1. One emoji per message/header (avoid emoji overload)
 1. Keep emoji usage consistent within each service
 1. Use status emojis (✅❌⚠️) for clear state communication
-1. Service emojis should match across logs, docs, and UI
+1. Use the same emoji for the same meaning across services
 
 ## Adding New Emojis
 
