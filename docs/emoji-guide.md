@@ -1,6 +1,8 @@
 # 📋 Emoji Usage Guide for GrooveMap
 
-This guide documents all emojis used throughout the GrooveMap project for consistency and clarity.
+This guide is the shared convention for emojis in GrooveMap logs, documentation, and CI output.
+It is for contributors to any GrooveMap repository. It is a target convention: individual
+services may not yet use every emoji listed here.
 
 Service names follow the canonical public
 [`design` repository catalog](https://github.com/groovemap-music/design/blob/41be7cbe738f40df0c75ad7065475e91d6cc2aa4/catalog/repositories.json).

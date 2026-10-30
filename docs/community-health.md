@@ -1,5 +1,8 @@
 # Community-health inheritance
 
+This page explains why this repository shares no community-health files and how to add one. It is
+for maintainers considering an organization-wide default.
+
 GitHub can use specific files from a public organization `.github` repository as defaults
 for repositories that do not define their own versions. That inheritance can change the
 public contribution or support contract of every repository in the organization.
