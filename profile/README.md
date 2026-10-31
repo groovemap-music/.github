@@ -20,6 +20,15 @@ artists, labels, releases, credits, and the relationships between them.
 - [GrooveMap on the web](https://groovemap.music) is the canonical project website and
   documentation entry point.
 
+## Run GrooveMap yourself
+
+GrooveMap can run on your own hardware. The [homelab guide](https://github.com/groovemap-music/deployment/blob/main/docs/homelab.md) covers requirements, setup, and upgrades, and the [deployment README](https://github.com/groovemap-music/deployment/blob/main/README.md#run-groovemap-in-your-homelab) has the quick start. In Claude Code, an AI agent can set it up for you:
+
+```text
+/plugin marketplace add groovemap-music/deployment
+/plugin install groovemap-homelab@groovemap
+```
+
 ## Public project repositories
 
 GrooveMap maintains 21 repositories: the 19 public implementation and documentation repositories
